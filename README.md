@@ -1,9 +1,10 @@
 # Self-Hosted OpenStack Platform — GitOps IaC on Baremetal
 
-A from-scratch private cloud: **baremetal OpenStack** (controller + compute) provisioned with
-**Ansible + Puppet**, a self-hosted **GitLab + Atlantis** control plane, **MinIO** for
-S3-compatible state, and **Terraform** managing the OpenStack tenancy + a **GCP-style Shared-VPC
-network topology** — all delivered through a merge-request GitOps workflow.
+A private cloud, built from scratch. Baremetal **OpenStack** (controller + compute) is stood up
+with **Ansible** and kept in configuration with **Puppet**. A self-hosted control plane —
+**GitLab + Atlantis**, with **MinIO** as the S3-compatible Terraform state backend — then manages
+OpenStack as code: the tenancy (projects, quotas, identity) and a **GCP-style Shared-VPC** network
+topology are applied by **Terraform through merge requests**, never by hand.
 
 > **What this demonstrates** (built entirely on my own baremetal — no employer/client code):
 > foundational **network engineering** (Shared-VPC design, VLANs, routers, RBAC, firewalling),
