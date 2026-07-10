@@ -135,7 +135,7 @@ scoped to the provider + self-service ranges.
 ## Repository layout
 
 ```
-knot-takehome/
+knotapi-takehome-chaugh/
 ├── openstack-foundations/     # ROOT: projects, quotas, identity role bindings  (own MinIO state)
 │   ├── projects.tf · identity.tf · providers.tf · backend.tf · variables.tf · outputs.tf
 │   ├── atlantis.yaml          # automerge, autoplan
