@@ -1,0 +1,19 @@
+# Atlantis repo config. Autoplans on TF changes. `atlantis apply` is gated ONLY by
+# the server-side pre-workflow hook (the `approved` label). It deliberately does NOT
+# require `mergeable`: Atlantis's own `atlantis/apply` status is pending until an
+# apply succeeds, and `only_allow_merge_if_pipeline_succeeds` makes that pending
+# status block mergeability — so requiring `mergeable` to apply is a deadlock
+# (apply ⇄ mergeable). After a successful apply, `atlantis/apply` goes green, the MR
+# becomes mergeable, and automerge merges it — so merge still only happens after apply.
+version: 3
+automerge: true
+projects:
+  - name: foundations
+    dir: .
+    terraform_version: v1.15.7
+    autoplan:
+      when_modified:
+        - "*.tf"
+        - "*.tfvars"
+      enabled: true
+    apply_requirements: []

@@ -1,0 +1,24 @@
+# ── Terraform ──────────────────────────────────────────────
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+
+# ── Real variable values — only *.example templates are committed ──
+*.tfvars
+!*.tfvars.example
+
+# ── Credentials / secrets — NEVER commit ───────────────────
+clouds.yaml
+clouds.yml
+*.pem
+*.key
+id_rsa*
+.env
+.env.*
+*secret*
+*credential*
+!*.example

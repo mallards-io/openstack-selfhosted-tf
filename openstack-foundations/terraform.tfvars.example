@@ -1,0 +1,61 @@
+# Concrete Mallards tenancy. Inputs live here; logic lives in *.tf.
+
+# openstack domain show mallards-io -f value -c id
+ldap_domain_id = "REPLACE_WITH_YOUR_KEYSTONE_DOMAIN_ID"
+
+projects = {
+  # Network/host projects run no compute (instances/cores/ram = 0) — GCP host-project model.
+  "mall-network-dev" = {
+    description   = "Shared Development Network Resources"
+    tier          = "network"
+    env           = "dev"
+    compute_quota = { instances = 0, cores = 0, ram = 0 }
+    network_quota = { network = 10, subnet = 20, port = 200, router = 5, floatingip = 10 }
+  }
+  "mall-network-stg" = {
+    description   = "Shared Staging Network Resources"
+    tier          = "network"
+    env           = "stg"
+    compute_quota = { instances = 0, cores = 0, ram = 0 }
+    network_quota = { network = 10, subnet = 20, port = 200, router = 5, floatingip = 10 }
+  }
+  "mall-network-prod" = {
+    description   = "Shared Production Network Resources"
+    tier          = "network"
+    env           = "prod"
+    compute_quota = { instances = 0, cores = 0, ram = 0 }
+    network_quota = { network = 10, subnet = 20, port = 200, router = 5, floatingip = 10 }
+  }
+  "mall-k8s-dev" = {
+    description   = "Mallards Kubernetes Development Environment"
+    tier          = "k8s"
+    env           = "dev"
+    compute_quota = { instances = 20, cores = 40, ram = 81920 }
+    network_quota = { floatingip = 10 }
+    storage_quota = { volumes = 50, gigabytes = 500 }
+  }
+  "mall-k8s-stg" = {
+    description   = "Mallards Kubernetes Staging Environment"
+    tier          = "k8s"
+    env           = "stg"
+    compute_quota = { instances = 30, cores = 60, ram = 122880 }
+    network_quota = { floatingip = 15 }
+    storage_quota = { volumes = 75, gigabytes = 1000 }
+  }
+  "mall-k8s-prod" = {
+    description   = "Mallards Kubernetes Production Environment"
+    tier          = "k8s"
+    env           = "prod"
+    compute_quota = { instances = 100, cores = 200, ram = 409600 }
+    network_quota = { floatingip = 50 }
+    storage_quota = { volumes = 200, gigabytes = 5000 }
+  }
+  "mall-cloudops" = {
+    description   = "Mallards CloudOps Shared Services"
+    tier          = "shared"
+    env           = "all"
+    compute_quota = { instances = 10, cores = 20, ram = 40960 }
+    network_quota = { floatingip = 5 }
+    storage_quota = { volumes = 20, gigabytes = 200 }
+  }
+}

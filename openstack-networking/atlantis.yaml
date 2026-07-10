@@ -1,0 +1,16 @@
+# Atlantis repo config. Auto-plans on Terraform changes in an MR; apply is
+# gated (approved + mergeable) via the server-side repos.yaml, then you merge.
+version: 3
+automerge: false
+projects:
+  - name: networking
+    dir: .
+    terraform_version: v1.15.7
+    autoplan:
+      when_modified:
+        - "*.tf"
+        - "*.tfvars"
+      enabled: true
+    apply_requirements:
+      - approved
+      - mergeable

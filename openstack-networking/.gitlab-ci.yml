@@ -1,0 +1,15 @@
+# Fast formatting gate ONLY. validate / plan / apply are handled by ATLANTIS via
+# MR comments (`atlantis plan` / `atlantis apply`), so GitLab CI and Atlantis
+# never both touch Terraform state. fmt needs no init/modules/creds.
+image: hashicorp/terraform:1.15.7
+
+stages:
+  - lint
+
+fmt:
+  stage: lint
+  script:
+    - terraform fmt -check -recursive
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'

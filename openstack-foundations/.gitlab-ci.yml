@@ -1,0 +1,25 @@
+# Fast formatting gate ONLY. validate / plan / apply are handled by ATLANTIS via
+# MR comments (`atlantis plan` / `atlantis apply`), so GitLab CI and Atlantis
+# never both touch Terraform state. fmt needs no init/modules/creds.
+#
+# entrypoint: [""] clears the image's `terraform` ENTRYPOINT so GitLab CI can run
+# its shell-based job script (otherwise the runner invokes `terraform sh -c ...`).
+image:
+  name: hashicorp/terraform:1.15.7
+  entrypoint: [""]
+
+stages:
+  - lint
+
+fmt:
+  stage: lint
+  script:
+    - terraform fmt -check -recursive
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# NOTE: two-party approval is NOT gated here (a pipeline job would show red on every
+# MR until someone approves). Instead Atlantis gates `atlantis apply` on the
+# `approved` label (applied by a non-author) via a pre-workflow hook. So the
+# pipeline stays green through review; approval is what unlocks the apply.

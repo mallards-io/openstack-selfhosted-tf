@@ -1,0 +1,50 @@
+# Concrete Mallards Shared VPC topology. Inputs here; logic in *.tf.
+
+ldap_domain_id = "REPLACE_WITH_YOUR_KEYSTONE_DOMAIN_ID" # openstack domain show mallards-io -f value -c id
+dns_nameserver = "10.100.20.94"                     # mgmt BIND
+fw_mgmt_cidr   = "10.100.20.0/24"                   # trusted mgmt subnet for SSH
+
+environments = {
+  dev = {
+    vlan             = 50
+    provider_cidr    = "10.100.50.0/24"
+    provider_gw      = "10.100.50.1"
+    provider_pool    = { start = "10.100.50.10", end = "10.100.50.200" }
+    selfservice_cidr = "10.200.50.0/24"
+    selfservice_gw   = "10.200.50.1"
+    network_project  = "mall-network-dev"
+    consumers        = ["mall-k8s-dev"]
+  }
+  stg = {
+    vlan             = 51
+    provider_cidr    = "10.100.51.0/24"
+    provider_gw      = "10.100.51.1"
+    provider_pool    = { start = "10.100.51.10", end = "10.100.51.200" }
+    selfservice_cidr = "10.200.51.0/24"
+    selfservice_gw   = "10.200.51.1"
+    network_project  = "mall-network-stg"
+    consumers        = ["mall-k8s-stg"]
+  }
+  prod = {
+    vlan             = 52
+    provider_cidr    = "10.100.52.0/24"
+    provider_gw      = "10.100.52.1"
+    provider_pool    = { start = "10.100.52.10", end = "10.100.52.200" }
+    selfservice_cidr = "10.200.52.0/24"
+    selfservice_gw   = "10.200.52.1"
+    network_project  = "mall-network-prod"
+    consumers        = ["mall-k8s-prod"]
+  }
+  # cloudops follows the addressing (VLAN 53) but is ISOLATED: owns its own stack,
+  # no consumers -> no RBAC shared in or out.
+  cloudops = {
+    vlan             = 53
+    provider_cidr    = "10.100.53.0/24"
+    provider_gw      = "10.100.53.1"
+    provider_pool    = { start = "10.100.53.10", end = "10.100.53.200" }
+    selfservice_cidr = "10.200.53.0/24"
+    selfservice_gw   = "10.200.53.1"
+    network_project  = "mall-cloudops"
+    consumers        = []
+  }
+}
